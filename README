@@ -1,0 +1,47 @@
+
+I found this in my attic today :)
+It's a little project I've written roughly 16 years ago, as a kid.
+Below is its original README. Enjoy.
+
+===
+
+BridgeDealer - hand dealing system
+Copyright (c) 2000 Michal J. Kubski
+All rights reserved.
+
+1 INTRODUCTION
+
+BridgeDealer is a hand dealing system for bridge players. It is written in
+C++ (speed critical part), and Perl. It consists of Perl extension (in C++),
+Perl module and script parser (in Perl) which uses XML-like grammar.
+
+It is currently known to run under:
+                Linux version 2.2.x (i386)
+
+If you use it on other systems and/or architectures let me know about that.
+
+BridgeDealer is free only for non-commercial use (for details read LICENSE
+file). If you like this program or want to share your ideas send me e-mail.
+I would be grateful if you send me your modifications, and scripts created
+in BridgeDealer (they shall appear on its website).
+
+2 THANKS
+
+I would like to thank Jerzy H. Kubski, because
+BridgeDealer would not ever come to life without his bridge-oriented
+enthusiasm.
+
+'vector', 'shapeclass', 'shape' and 'pattern' functions are inspired by Deal
+written by Thomas Andrews <thomaso@best.com>.
+
+3 DOCUMENTATION
+
+For license see LICENSE file.
+
+For BridgeDealer's script parser's guide see doc/PARSER.
+For BridgeDealer's guide see doc/GUIDE.
+
+For porting hints see PORTING file.
+For installation instructions see INSTALL file.
+
+Source tree of BridgeDealer is described in CONTENTS file.

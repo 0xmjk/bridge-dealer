@@ -1,0 +1,36 @@
+<--
+  BridgeDealer.dh
+
+  Part of:
+  BridgeDealer - hand dealing system
+  Copyright (c) 2000 Michal J. Kubski
+  All rights reserved.
+
+  Defines suits and players number values, and SHAPECLASS macro.
+
+-->
+<dealer>
+    <define name="$SPADES">0</define>
+    <define name="$HEARTS">1</define>
+    <define name="$DIAMONDS">2</define>
+    <define name="$CLUBS">3</define>
+
+    <define name="$NORTH">0</define>
+    <define name="$EAST">1</define>
+    <define name="$SOUTH">2</define>
+    <define name="$WEST">3</define>
+
+    <define name="SHAPECLASS">
+        my $context=shift;
+        my $hnd=shift;
+        my $s=length($context->hand($hnd,$SPADES));
+        my $h=length($context->hand($hnd,$HEARTS));
+        my $d=length($context->hand($hnd,$DIAMONDS));
+        my $c=length($context->hand($hnd,$CLUBS));
+        my $hcp=$context->hcp($hnd);
+    </define>
+
+    <code>
+        use BridgeDealer;
+    </code>
+</dealer>

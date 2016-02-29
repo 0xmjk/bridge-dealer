@@ -1,0 +1,58 @@
+BridgeDealer's script parser uses XML-like grammar and it is
+case-sensitive, so every tag must be in lower-case letters.
+
+1 CONFIGURATION
+
+There are three variables in CONFIGURATION PART of 'BridgeDealer' file.
+
+$libdir	
+	is a place where 'BridgeDealer.dh' resides (libraries directory)
+
+$perlpath
+	is a path to Perl executable
+
+$tempdir
+	is a place where parser puts a temporary file
+
+2 BLOCK TAGS
+
+<dealer>TAGS</dealer>
+	Parses block of tags from TAGS. 
+
+<code>CODE</code>
+	Executes CODE block, which holds Perl instructions.
+	NOTE: everything outside <code> tag, except other tags is ignored!
+
+3 INCLUDING FILES 
+
+<include>FILE</include>
+<lib>FILE</lib>
+	Includes a file from current directory (<include>), or libraries
+	directory (<lib>).
+	NOTE: The FILE could be a new-line separated list of files to include.
+
+4 MACRO DEFINITIONS
+
+<define name="MACRO">DEFINITION</define>
+	Defines DEFINITION as MACRO.
+
+<ifdef name="MACRO">TAGS</ifdef>
+	If MACRO is defined parses TAGS.
+
+<ifndef name="MACRO">TAGS</ifndef>
+	If MACRO is not defined parses TAGS.
+
+5 COMMENTS
+
+There are two types of comments, first are indicated by the '#' character,
+and extend to the end of the line, second are indicated by '<--', and extend
+to '-->', e.g.:
+
+# COMMENTED LINE
+
+<-- COMMENTED
+    LINES
+    OF
+    TEXT
+-->
+ 

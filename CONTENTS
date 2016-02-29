@@ -1,0 +1,51 @@
+CONTENTS
+	This file.
+INSTALL
+	Installation instructions.
+LICENSE
+	Guess what ;).
+PORTING
+	Porting hints.
+README
+	You should read this first.
+BridgeDealer.pm
+	Perl Module
+BridgeDealer.xs
+	Perl Extension source 
+dealer.cc
+	C++ part source
+dealer.h
+	Include file for 'dealer.cc'
+bin/BridgeDealer
+	Script parser
+doc/GUIDE
+	BridgeDealer's guide
+doc/PARSER
+	Script parser's guide
+doc/examples/bergen
+	Script showing use of 'shapeclass'.
+doc/examples/clean
+	Script generating completely random deal.
+doc/examples/genhcp
+	Script showing use of 'genhcp'.
+doc/examples/sethand
+	Script showing use of 'sethand'.	
+doc/examples/shapeclass
+	Script showing use of 'shapeclass'.
+doc/examples/testing
+	Script showing use of 'testing.dh' file.
+doc/examples/vector
+	Script showing use of 'vector'.
+doc/examples/lib/shapes.dh
+	Sample library of shapeclasses, used by doc/examples/shapeclass.
+lib/BridgeDealer.dh
+	Library
+lib/testing.dh
+	Defines tdeal() and treset(), see doc/examples/testing file.
+lib/genhcp.al
+lib/sethand.al
+lib/vector.al
+	Sources for 'genhcp', 'sethand' and 'vector' functions.
+lib/simpleprint.al
+lib/tableprint.al
+	Sources for two default output formats.

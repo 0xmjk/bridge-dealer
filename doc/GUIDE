@@ -1,0 +1,152 @@
+1 BASICS
+
+new() constructor
+    $context=new BridgeDealer();
+        Puts a new BridgeDealer object into $context.
+
+deal()
+    $context->deal();
+        Generates a deal.
+
+2 QUERYING DEALS
+
+hand(player,suit)
+    $r=$context->hand($a,$b);
+        Returns a string of cards in the $b suit of $a player.
+
+hcp(player)
+        $r=$context->hcp($a)
+                Returns the total HCP in $a player's hand.
+
+shape(player)
+    $r=$context->shape($a);
+        Returns a string of suits lengths of $a player's hand, in the
+        order S, H, D, C (e.g. "4 2 4 3").
+
+pattern(player)
+    $r=$context->pattern($a)
+        Returns a string of suits lengths of $a player's hand, sorted
+        in descending order (e.g. "4 4 3 2").
+
+3 BASIC OUTPUTS
+
+simpleprint() [from 'simpleprint.al']
+    $context->simpleprint();
+        Prints the deal in a crude format.
+
+tableprint() [from 'tableprint.al']
+    $context->tableprint();
+        Prints the deal formatted into a nice table.
+
+4 STANDARD MACROS [from 'BridgeDealer.dh']
+
+Suits and players
+
+    MACRO        VALUE
+    ------------------
+    $SPADES        0
+    $HEARTS        1
+    $DIAMONDS      2
+    $CLUBS         3
+
+    $NORTH         0
+    $EAST          1 
+    $SOUTH         2
+    $WEST          3
+
+Shape classes
+
+    'SHAPECLASS' extends to:
+
+            my $context=shift;
+            my $hnd=shift;
+            my $s=length($context->hand($hnd,$SPADES));
+            my $h=length($context->hand($hnd,$HEARTS));
+            my $d=length($context->hand($hnd,$DIAMONDS));
+            my $c=length($context->hand($hnd,$CLUBS));
+            my $hcp=$context->hcp($hnd);
+
+    It is used as a shorthand in functions that return value depending on a
+    shape (length of suits in a hand) of hand. For example we define a
+    'balanced' shape as:
+
+        sub balanced {
+            SHAPECLASS
+            return ($s<5) && ($h<5) &&
+                ($s*$s + $h*$h + $d*$d + $c*$c <= 47)
+        }
+
+    Then to check the shape of deal, do:
+
+        do {
+	    $context->deal();
+        } until balanced($context,$SOUTH);
+
+5 HAND PRESETTING
+
+cleandeck()
+    $context->cleandeck();
+        Cleans a deck before presetting it.
+
+setdeck(player,suit,value)
+    $context->setdeck($a,$b,$c);
+        Gives to $a player a card of $c value in $b suit.
+        E.g.: $context->setdeck(1,3,11) will give 3C to East.
+        NOTE: It is a low-level function. Use 'sethand' instead.
+
+sethand(player,S,H,D,C) [from 'sethand.al']
+    $context->sethand($a,$s,$h,$d,$c)
+        Gives to $a player cards in $s, $h, $d, and $c strings
+        (e.g. "AKJ")
+
+genhcp(player,minpoints,maxpoints,table_ptr) [from 'genhcp.al']
+    $context->genhcp($a,$b,$c,\@d);
+        Puts random honor cards in $a player's hand, in condition that HCP
+        ranges from $b to $c, and number of honors in each suit
+        are in the ranges in the @d table, which is defined as:
+            @d = (minS,maxS,minH,maxH,minD,maxD,minC,maxC);
+
+6 ADDITIONAL FUNCTIONS
+
+vector (player,table_pointer) [from 'vector.al']
+    $r=$context->vector($a,\@b);
+        Computes a value of $a player hand, using values of cards from the
+        @b table, which is defined as:
+            @b = (A,K,Q,J,T,9,8,7,6,5,4,3,2);
+        E.g.: a vector for counting HCP is:
+            @hcp = (4,3,2,1,0,0,0,0,0,0,0,0,0);
+              or shorter:
+            @hcp = (4,3,2,1);
+
+vector (player,table_pointer,suit) [from 'vector.al']
+    $r=$context->vector($a,\@b,$c);
+        Does the same as above, but only for $c suit of player's $a hand. 
+        E.g.: To count HCP of North's spades (if @hcp table is defined as
+        above), do:
+            $context->vector($NORTH,\@hcp,$SPADES)
+
+switch(expression, hash) [from 'BridgeDealer.pm']
+	$r=switch($a, %hash);
+
+            Calls that subroutine from hash table for which the $a
+            expression is the key.
+	    'switch' returns -1 if $a key does not exist in hash table,
+            or 0 when it exists.
+	    E.g.:
+
+                $r=switch ($a,
+                           "A" => sub { $num = 0 },
+                           "K" => sub { $num = 1 },
+                           "Q" => sub { $num = 2 },
+                           "J" => sub { $num = 3 },
+                           "T" => sub { $num = 4 },
+                           "9" => sub { $num = 5 },
+                           "8" => sub { $num = 6 },
+                           "7" => sub { $num = 7 },
+                           "6" => sub { $num = 8 },
+                           "5" => sub { $num = 9 },
+                           "4" => sub { $num = 10 },
+                           "3" => sub { $num = 11 },
+                           "2" => sub { $num = 12 }
+                          );
+                die "Bad card" if $r==-1; 

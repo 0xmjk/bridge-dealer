@@ -1,0 +1,30 @@
+You will need C++ and Perl. For porting hints for other systems than Linux
+see PORTING file.
+
+To build BridgeDealer run from its top-level directory (which contains this
+file) following commands:
+
+perl ./Makefile.PL
+make
+
+Once BridgeDealer has been built correctly, run:
+
+make install
+
+For Debian GNU/Linux 2.1 it will install script parser 'BridgeDealer' in
+'/usr/bin' and Perl modules in '/usr/local/lib/site_perl'.
+
+NOTE: You might have to change few things in script parser's configuration
+part to bring BridgeDealer to life on your system.
+
+NOTE: For Win32 Strawberry Perl you would need to edit paths in bin/BridgeDealer
+as following:
+
+    # Directory where 'BridgeDealer.dh' resides
+    $libdir = "C:/strawberry/perl/site/lib/BridgeDealer/";
+
+    # Perl executable path followed by its name
+    $perlpath = "C:/strawberry/perl/bin/perl.exe";
+
+    # Temporary files directory
+    $tempdir = "C:/windows/Temp";

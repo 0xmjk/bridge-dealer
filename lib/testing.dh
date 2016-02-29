@@ -1,0 +1,45 @@
+<--
+  testing.dh
+
+  Part of:
+  BridgeDealer - hand dealing system
+  Copyright (c) 2000 Michal J. Kubski
+  All rights reserved.
+
+  Defines a wrapper over 'deal', the 'tdeal'.
+  'tdeal' counts how many times it was called.
+
+  If counter reaches MAX_COUNT, 'tdeal' returns 1,
+  else it returns 0;
+
+  If MAX_COUNT is not defined 'tdeal' only
+  increases counter.
+
+  BTW: 'treset' resets counter.
+-->
+<dealer>
+    <ifdef name="MAX_COUNT">
+        <code>
+            $testing_maxcount=MAX_COUNT;
+        </code>
+    </ifdef>
+
+    <code>
+        sub treset { $testing_count=0; }
+    </code>
+
+    <code>
+        sub tdeal {
+            my $context = shift;
+            $testing_count++;
+            $context->deal();
+    </code>
+    <ifdef name="MAX_COUNT">
+        <code>
+            if ($testing_count>$testing_maxcount) { 1 } else { 0 }
+        </code>
+    </ifdef>
+    <code>
+        }
+    </code>
+</dealer>

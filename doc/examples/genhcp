@@ -1,0 +1,40 @@
+#!/usr/bin/perl /usr/bin/BridgeDealer
+<--
+  doc/examples/genhcp
+
+  Part of:
+  BridgeDealer - hand dealing system
+  Copyright (c) 2000 Michal J. Kubski
+  All rights reserved.
+
+  At start gives (using 'genhcp') North 'AKQJ'
+  in spades, HCPs from 18 to 21.
+
+  Then generates rest of deck, where North must
+  have at least 6 spades and HCPs from 18 to 21. 
+
+-->
+<dealer>
+    <lib>
+        BridgeDealer.dh
+    </lib>
+    <code>
+        my $d = new BridgeDealer;
+        my @tab = (4, 4,
+                   0, 4,
+                   0, 4,
+                   0, 4);
+
+        $d->cleandeck();
+        $d->genhcp ($NORTH,18,21,@tab);
+
+        for (my $i=0; $i<4; $i++) { 
+            print $i+1,".\n\n";            
+            do {
+                $d->deal();
+            } until length($d->hand($NORTH,$SPADES))>=6 &&
+                    $d->hcp($NORTH)>=18 && $d->hcp($NORTH)<=21;
+            $d->simpleprint();
+        }
+    </code>
+</dealer>

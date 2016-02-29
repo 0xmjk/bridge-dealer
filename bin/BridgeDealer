@@ -1,0 +1,157 @@
+#!/usr/bin/perl
+
+#
+# BridgeDealer's script parser
+# Copyright (c) 2000,2008 Michal J. Kubski
+# 
+# Part of:
+# BridgeDealer - hand dealing system
+# Copyright (c) 2000,2008 Michal J. Kubski
+# All rights reserved.
+#
+# It parses a file and writes output to the temporary file in $tempdir.
+# Then it starts $perlpath (Perl executable), if Perl run was successful it
+# deletes the temporary file.
+#
+
+#
+# CONFIGURATION PART
+#
+
+# Directory where 'BridgeDealer.dh' resides
+$libdir = "/usr/local/lib/site_perl/BridgeDealer/";
+
+# Perl executable path followed by its name
+$perlpath = "/usr/bin/perl";
+
+# Temporary files directory
+$tempdir = "/tmp";
+
+###                                                                ###
+#  DO NOT TOUCH after this line unless you know what you are doing!  #
+###                                                                ###
+
+use IO::File;
+use File::Basename;
+
+%macro = ();
+%tags = ();
+
+$path = "";
+
+#
+# macro expanding routine
+#
+
+sub demacro
+{
+	my $t = shift;
+        while (($macro,$defn) = each %macro )
+        {
+                $t=~s/$macro/$defn/g
+        }
+	$t;
+}
+
+#
+# parsing routine
+#
+
+sub parse
+{
+	my $string = shift;
+	my $ret;
+	$string =~ s/#.*\n//g;		# rip off perl comments
+        $string =~ s/<--.*-->//sg;	# rip off <-- xxx --> comments
+	for (my $pos=0;;) {
+		my $i=index ($string,'<',$pos);
+		last if ($i<$pos);
+		my $j=index ($string,'>',$i);
+		last if ($j<$pos);
+
+		my $ctag=substr($string,$i+1,$j-$i-1);		
+		my ($tag, @a) = split (/ /,$ctag);
+
+		$pos=$j+1;
+
+		my $k=index ($string,"</$tag>",$pos);
+		last if ($k<$pos);
+
+		local $c=substr($string,$pos,$k-$pos);
+		local %v={};
+		while (my ($x,$y) = split(/=/, shift @a)) {
+			$y =~ s/^"//g;
+			$y =~ s/"$//g;
+			$v{$x}=$y;
+		}
+		$ret.=&{$tags{$tag}} if ($tags{$tag});
+
+		$pos=$k+length($tag)+3;
+	}
+	$ret;
+}
+
+#
+# file include routine
+#
+
+sub include
+{
+	my $text;
+	for (my $i=0; $i <= $#_; $i++) {
+		my $f=@_[$i];
+		$f =~ s/[\t ]*//g;
+		next if ($f =~ /^\#/);
+		next if (($f cmp "")==0);
+		my $s = $path.$f;
+		my $FILE = new IO::File;
+		die "Can't open \"$s\" file. " if !open ($FILE,$s);
+		my $intext;
+		while (<$FILE>)
+		{
+			$intext.=$_."\n";
+		}
+		$text.=parse($intext);
+		close ($FILE);
+	}
+	$text;
+}
+
+#
+# tags table
+#
+
+%tags=(
+       'dealer'		=> sub{ parse($c)},
+       'include'	=> sub{ $path="";
+				include(@{[split ("\n",$c)]}) },
+       'lib'		=> sub{ $path=$libdir;
+				include(@{[split ("\n",$c)]}) },
+       'define'		=> sub{ $v{name} =~ s/\$/\\\$/g;
+				$macro{$v{name}} = demacro($c);
+				""},
+       'ifdef'		=> sub{	parse($c) if (($macro{$v{name}} cmp "")!=0) },
+       'ifndef'		=> sub{ parse($c) if (($macro{$v{name}} cmp "")==0) },
+       'code'		=> sub{ demacro($c) },
+     );
+
+#
+# main routine
+#
+
+my $filename = @ARGV[0];
+shift;
+
+my $output = include ($filename);
+$output =~ s/^[ \t]*\n//mg;
+$output =~ s/\n+/\n/mg;
+
+$filename =~ s/\.//g;
+$filename =~ s/\//_/g;
+$filename = $tempdir.'/'.basename($filename).time;
+my $FILE = new IO::File "> $filename" or die "cannot create file $filename: ".$!;
+print $FILE $output; 
+close ($FILE);
+
+unlink $filename if !system($perlpath, '-w', $filename, @ARGV);
+ 

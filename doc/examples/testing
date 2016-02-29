@@ -1,0 +1,37 @@
+#!/usr/bin/perl /usr/bin/BridgeDealer
+<--
+  doc/examples/testing
+
+  Part of:
+  BridgeDealer - hand dealing system
+  Copyright (c) 2000 Michal J. Kubski
+  All rights reserved.
+
+  Tries to find 100 deals, where North and South
+  have 35 HCPs, but when the $testing_count reaches 50
+  it gives up.
+
+-->
+<dealer>
+
+    <define name="MAX_COUNT">50</define>
+
+    <lib>
+        BridgeDealer.dh
+        testing.dh
+    </lib>
+
+    <code>
+    my $d = new BridgeDealer;
+    for (my $i; $i<100; $i++) { 
+	my $ret;
+        treset();
+        do {		
+            $ret=tdeal($d);
+	    next if $ret;
+        } until $d->hcp($NORTH)+$d->hcp($SOUTH)==35;
+        print "Dealt in $testing_count deals\n";
+        $d->simpleprint();
+    }
+    </code>
+</dealer>

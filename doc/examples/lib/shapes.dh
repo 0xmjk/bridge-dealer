@@ -1,0 +1,19 @@
+<--
+  doc/examples/lib/shapes.dh
+
+  Part of:
+  BridgeDealer - hand dealing system
+  Copyright (c) 2000 Michal J. Kubski
+  All rights reserved.
+
+  It defines four simple shape classes.
+
+-->
+<dealer>
+<code>
+	sub balanced { SHAPECLASS ($s<5)&&($h<5)&&($s*$s+$h*$h+$d*$d+$c*$c<=47) }
+	sub freakish { SHAPECLASS $s*$s+$h*$h+$d*$d+$c*$c>=63 }
+	sub unbalanced { SHAPECLASS !(balanced($context,$hand) || freakish($context, $hand)) }
+	sub _1NT { SHAPECLASS balanced($hand) && $hcp >= 15 && $hcp <= 18 } 
+</code>
+</dealer>

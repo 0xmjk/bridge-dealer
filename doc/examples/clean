@@ -1,0 +1,26 @@
+#!/usr/bin/perl /usr/bin/BridgeDealer
+<--
+  doc/examples/clean
+
+  Part of:
+  BridgeDealer - hand dealing system
+  Copyright (c) 2000 Michal J. Kubski
+  All rights reserved.
+
+  Prints some completely random deals.
+
+  Use it as a template.
+-->
+<dealer>
+    <lib>
+        BridgeDealer.dh
+    </lib>
+    <code>
+        my $d = new BridgeDealer;
+        for (my $i=0; $i<10; $i++) { 
+            print $i+1,".\n\n";            
+            $d->deal();
+            $d->simpleprint();
+        }
+    </code>
+</dealer>

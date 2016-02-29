@@ -1,0 +1,33 @@
+#!/usr/bin/perl /usr/bin/BridgeDealer
+<--
+  doc/examples/vector
+
+  Part of:
+  BridgeDealer - hand dealing system
+  Copyright (c) 2000 Michal J. Kubski
+  All rights reserved.
+
+  Generates deals where North has 5 controls
+  and 3 figures in spades, using 'vector' function.
+
+-->
+<dealer>
+    <lib>
+        BridgeDealer.dh
+    </lib>
+    <code>
+        my $d = new BridgeDealer;
+
+        @controls = (2,1);
+        @figs = (1,1,1,1);
+
+        for (my $i=0; $i<5; $i++) { 
+            print $i+1,".\n\n";            
+            do {
+                $d->deal();
+            } until $d->vector($NORTH,\@controls)==5 &&
+                    $d->vector($NORTH,\@figs,$SPADES)==3;
+            $d->simpleprint();
+        }
+    </code>
+</dealer>

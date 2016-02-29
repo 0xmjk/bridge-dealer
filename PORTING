@@ -1,0 +1,17 @@
+BridgeDealer needs Perl and C++. It should be portable to many systems. You
+might have a problems with:
+
+1) 'unsigned long long int' type (64 bits)
+        which is used to hold deck data.
+
+2) the random generator (in 'dealer.cc' file)
+
+   Dealer::init_rand
+        which initialises pseudo-random generator with a seed taken from
+        system generator (using Linux-specific device /dev/random).
+
+   Dealer::rndcard
+        which uses drand48() function for more read carefully 'dealer.cc'
+
+3) your Perl distribution must have ExtUtils::MakeMaker module, it is used
+   to build Makefile.

@@ -1,0 +1,35 @@
+#!/usr/bin/perl /usr/bin/BridgeDealer
+<--
+  doc/examples/bergen
+
+  Part of:
+  BridgeDealer - hand dealing system
+  Copyright (c) 2000 Michal J. Kubski
+  All rights reserved.
+
+  Generates deals where South has a card worth an opening bid, using
+  Bergen's "rule of 20" (add HCP to lengths of two longest suits, if it adds
+  up to 20 then open).
+ 
+-->
+<dealer>
+    <lib>
+        BridgeDealer.dh
+    </lib>
+    <code>
+	sub bergen {
+		SHAPECLASS
+		my @tab = ($s,$h,$d,$c);
+		@tab = sort @tab;
+		return ($hcp+$tab[2]+$tab[3]) >= 20;
+	}
+        my $d = new BridgeDealer;
+        for (my $i=0; $i<3; $i++) { 
+            print $i+1,".\n\n";            
+            do {
+                $d->deal();
+            } until bergen($d,$SOUTH);
+            $d->simpleprint();
+        }
+    </code>
+</dealer>

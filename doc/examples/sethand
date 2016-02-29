@@ -1,0 +1,30 @@
+#!/usr/bin/perl /usr/bin/BridgeDealer
+<--
+  doc/examples/sethand
+
+  Part of:
+  BridgeDealer - hand dealing system
+  Copyright (c) 2000 Michal J. Kubski
+  All rights reserved.
+
+  Generates deals, where North always has
+  'A' in hearts, 'AK' in diamonds and 'AKQ' in clubs.
+
+-->
+<dealer>
+    <lib>
+        BridgeDealer.dh
+    </lib>
+    <code>
+        my $d = new BridgeDealer;
+        for (my $i=0; $i<10; $i++) { 
+            print $i+1,".\n\n";
+
+            $d->cleandeck();
+            $d->sethand ($NORTH,"","A","AK","AKQ");
+
+            $d->deal();
+            $d->simpleprint();
+        }
+    </code>
+</dealer>
